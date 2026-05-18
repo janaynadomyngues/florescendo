@@ -61,6 +61,13 @@
     .loading-dot{width:7px;height:7px;border-radius:50%;background:#d4a0b0;animation:dotP 1.5s ease-in-out infinite}
     .loading-dot:nth-child(2){animation-delay:.2s}
     .loading-dot:nth-child(3){animation-delay:.4s}
+    .slides-wrap{flex:1;display:flex;overflow:hidden;position:relative}
+    .slide{min-width:100%;height:100%;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:28px 28px 16px;text-align:center;transition:transform .35s ease;position:relative;z-index:1}
+    .slide-dots{display:flex;gap:6px;justify-content:center;padding:8px 0;flex-shrink:0;background:rgba(253,246,240,.92)}
+    .slide-dot{width:6px;height:6px;border-radius:50%;background:rgba(122,63,90,.2);transition:all .3s}
+    .slide-dot.active{width:20px;border-radius:4px;background:#7a3f5a}
+    @keyframes slideIn{from{opacity:0;transform:translateX(30px)}to{opacity:1;transform:translateX(0)}}
+    .slide-anim{animation:slideIn .4s ease}
     @supports (-webkit-touch-callout: none) {
       .bottom-nav { padding-bottom: max(80px, env(safe-area-inset-bottom, 80px)) !important; }
       .screen { padding-bottom: 0 !important; }
@@ -126,7 +133,7 @@ async function gerarDevo(){
   return await res.json();
 }
 
-function go(s){S.screen=s;render();}
+function go_internal(s){S.screen=s;render();}
 function togFav(){
   if(S.isFav){db.removeFav(todayISO);S.isFav=false;toast('Removido dos favoritos');}
   else{db.saveFav(S.devo,todayISO);S.isFav=true;toast('Salvo nos favoritos 🌸');}
@@ -240,76 +247,129 @@ function renderHome(){
     ${bnav('home')}${toast_html()}</div>`;
 }
 
+function getSlides(d){
+  const bgs=[
+    'linear-gradient(170deg,#fdf6f0,#faeae0 50%,#f5dce8)',
+    'linear-gradient(170deg,#fdf6f0,#faeae0)',
+    'linear-gradient(160deg,#fdf6f0,#f5e8f0)',
+    'linear-gradient(170deg,#faeae0,#f5dce8)',
+    'linear-gradient(160deg,#f5ece8,#fdf6f0)',
+    'linear-gradient(170deg,#fdf6f0,#e8f0f5 50%,#f0e8f5)',
+    'linear-gradient(160deg,#faeae0,#fdf6f0)',
+    'linear-gradient(170deg,#f5dce8,#fdf6f0)',
+    'linear-gradient(135deg,#7a3f5a,#c4836a)',
+  ];
+  return[
+    // Slide 1 - Versículo
+    {bg:bgs[0],html:`
+      <div style="font-size:42px;margin-bottom:12px;animation:flt 3s ease-in-out infinite">🌸</div>
+      <div style="font-size:9px;letter-spacing:4px;color:#c4836a;text-transform:uppercase;margin-bottom:16px">${d.referencia}</div>
+      <div style="width:60px;height:1px;background:linear-gradient(90deg,transparent,#d4a0b0,transparent);margin:0 auto 20px"></div>
+      <div style="background:rgba(255,255,255,.72);border-radius:20px;padding:24px;border:1px solid rgba(122,63,90,.1);width:100%">
+        <div style="font-family:'Cormorant Garamond',serif;font-size:20px;line-height:1.8;color:#4a2a3a;font-style:italic">"${d.versiculo}"</div>
+        <div style="font-size:11px;letter-spacing:2px;color:#c4836a;text-transform:uppercase;margin-top:14px">${d.referencia}</div>
+      </div>`},
+    // Slide 2 - Desconstrução + frase impacto
+    {bg:bgs[1],html:`
+      <div style="font-family:'Cormorant Garamond',serif;font-size:19px;line-height:1.85;color:#4a3030;text-align:center;margin-bottom:24px">${d.desconstrucao}</div>
+      <div style="color:#d4a0b0;opacity:.6;margin-bottom:20px">❋</div>
+      <div style="background:rgba(122,63,90,.07);border-radius:18px;padding:22px;border:1px solid rgba(122,63,90,.1);width:100%">
+        <div style="font-family:'Cormorant Garamond',serif;font-size:20px;font-weight:500;line-height:1.6;color:#7a3f5a;font-style:italic">${d.frase_impacto}</div>
+      </div>`},
+    // Slide 3 - Conexão com a mulher + pergunta
+    {bg:bgs[2],html:`
+      <div style="font-family:'Cormorant Garamond',serif;font-size:19px;line-height:1.85;color:#4a3030;text-align:center;margin-bottom:24px;font-style:italic">${d.conexao_mulher}</div>
+      <div style="color:#d4a0b0;opacity:.6;margin-bottom:20px">❋</div>
+      <div style="background:rgba(122,63,90,.07);border-radius:18px;padding:22px;width:100%">
+        <div style="font-family:'Cormorant Garamond',serif;font-size:19px;line-height:1.7;color:#7a3f5a;font-style:italic">${d.exemplo_jesus}</div>
+      </div>`},
+    // Slide 4 - Lista negação
+    {bg:bgs[3],html:`
+      <div style="font-size:11px;letter-spacing:3px;text-transform:uppercase;color:#7a3f5a;margin-bottom:20px;font-weight:700;font-family:'Cormorant Garamond',serif">${d.lista_negacao_titulo}</div>
+      <div style="width:100%;text-align:left">${(d.lista_negacao||[]).map(i=>`
+        <div style="display:flex;align-items:flex-start;gap:12px;margin-bottom:14px">
+          <span style="color:#d4a0b0;font-size:14px;margin-top:2px;flex-shrink:0">❋</span>
+          <span style="font-family:'Cormorant Garamond',serif;font-size:18px;font-style:italic;color:#5a3a4a;line-height:1.5">${i}</span>
+        </div>`).join('')}
+      </div>
+      <div style="color:#d4a0b0;opacity:.5;margin:12px 0">❋</div>
+      <div style="background:rgba(122,63,90,.07);border-radius:18px;padding:18px;width:100%">
+        <div style="font-family:'Cormorant Garamond',serif;font-size:18px;line-height:1.7;color:#7a3f5a;font-style:italic;text-align:center">${d.redefinicao}</div>
+      </div>`},
+    // Slide 5 - Lista Cristo
+    {bg:bgs[4],html:`
+      <div style="font-size:11px;letter-spacing:3px;text-transform:uppercase;color:#7a3f5a;margin-bottom:20px;font-weight:700;font-family:'Cormorant Garamond',serif">${d.lista_cristo_titulo}</div>
+      <div style="width:100%;text-align:left;margin-bottom:20px">${(d.lista_cristo||[]).map(i=>`
+        <div style="display:flex;align-items:flex-start;gap:12px;margin-bottom:14px">
+          <span style="color:#d4a0b0;font-size:14px;margin-top:2px;flex-shrink:0">❋</span>
+          <span style="font-family:'Cormorant Garamond',serif;font-size:18px;font-style:italic;color:#5a3a4a;line-height:1.5">${i}</span>
+        </div>`).join('')}
+      </div>
+      <div style="background:rgba(122,63,90,.07);border-radius:18px;padding:18px;width:100%">
+        <div style="font-family:'Cormorant Garamond',serif;font-size:18px;line-height:1.7;color:#7a3f5a;font-style:italic;text-align:center">${d.contraste}</div>
+      </div>`},
+    // Slide 6 - Ensinamento + aprofundamento
+    {bg:bgs[5],html:`
+      <div style="font-family:'Cormorant Garamond',serif;font-size:19px;line-height:1.85;color:#4a3030;text-align:center;margin-bottom:20px">${d.ensinamento_extra}</div>
+      <div style="color:#d4a0b0;opacity:.6;margin-bottom:20px">❋</div>
+      <div style="font-family:'Cormorant Garamond',serif;font-size:18px;line-height:1.85;color:#4a3030;text-align:center;font-style:italic">${d.aprofundamento}</div>`},
+    // Slide 7 - Lista madura + clímax
+    {bg:bgs[6],html:`
+      <div style="font-size:11px;letter-spacing:3px;text-transform:uppercase;color:#7a3f5a;margin-bottom:20px;font-weight:700;font-family:'Cormorant Garamond',serif">${d.lista_madura_titulo}</div>
+      <div style="width:100%;text-align:left;margin-bottom:20px">${(d.lista_madura||[]).map(i=>`
+        <div style="display:flex;align-items:flex-start;gap:12px;margin-bottom:14px">
+          <span style="color:#d4a0b0;font-size:14px;margin-top:2px;flex-shrink:0">❋</span>
+          <span style="font-family:'Cormorant Garamond',serif;font-size:18px;font-style:italic;color:#5a3a4a;line-height:1.5">${i}</span>
+        </div>`).join('')}
+      </div>`},
+    // Slide 8 - Clímax + identidade
+    {bg:bgs[7],html:`
+      <div style="background:linear-gradient(135deg,#7a3f5a,#9a5a6a);border-radius:18px;padding:24px;width:100%;margin-bottom:20px">
+        <div style="font-family:'Cormorant Garamond',serif;font-size:19px;line-height:1.8;color:white;text-align:center">${d.climax_citacao}</div>
+      </div>
+      <div style="font-family:'Cormorant Garamond',serif;font-size:22px;font-weight:500;color:#7a3f5a;font-style:italic;margin-bottom:16px">${d.conclusao_nomeada}</div>
+      <div style="font-family:'Cormorant Garamond',serif;font-size:17px;color:#4a3030;font-style:italic;line-height:1.7;margin-bottom:12px">${d.fechamento_1}</div>
+      <div style="background:rgba(122,63,90,.07);border-radius:16px;padding:16px;width:100%">
+        <div style="font-family:'Cormorant Garamond',serif;font-size:19px;font-weight:600;color:#4a2a3a;text-align:center;line-height:1.5">${d.fechamento_2}</div>
+      </div>`},
+    // Slide 9 - Oração
+    {bg:bgs[8],html:`
+      <div style="font-size:9px;letter-spacing:4px;text-transform:uppercase;color:rgba(255,255,255,.8);margin-bottom:16px">🙏 Oração</div>
+      <div style="width:40px;height:1px;background:rgba(255,255,255,.3);margin:0 auto 24px"></div>
+      <div style="font-family:'Cormorant Garamond',serif;font-size:19px;font-style:italic;line-height:1.9;color:white;text-align:center">${d.oracao}</div>`},
+  ];
+}
+
 function renderDevo(){
   if(!S.devo){go('home');return'';}
   const d=S.devo;
-  const diarioHtml=S.anotacaoSalva?
-    `<div style="background:rgba(255,255,255,.7);border-radius:16px;padding:18px 20px;border:1px solid rgba(122,63,90,.15);margin-bottom:12px">
-      <div style="font-size:9px;letter-spacing:3px;color:#c4836a;text-transform:uppercase;margin-bottom:8px">✍️ Sua anotação de hoje</div>
-      <div style="font-family:'Cormorant Garamond',serif;font-size:15px;line-height:1.8;color:#4a3030;font-style:italic">${S.anotacao}</div>
-    </div>
-    <button onclick="editarAnotacao()" style="width:100%;background:transparent;border:1px solid rgba(122,63,90,.25);border-radius:50px;padding:11px;color:#9b4d72;font-family:'Cormorant Garamond',serif;font-size:14px;cursor:pointer">✏️ Editar anotação</button>`:
-    `<textarea id="devo-ta" placeholder="Escreva aqui o que Deus falou ao seu coração hoje..." onkeyup="updAnotacao(this.value)" style="width:100%;min-height:120px;border-radius:16px;border:1px solid rgba(122,63,90,.2);padding:16px;font-family:'Cormorant Garamond',serif;font-size:15px;line-height:1.7;color:#4a3030;background:rgba(255,255,255,.7);outline:none;resize:none;box-shadow:inset 0 2px 8px rgba(122,63,90,.05)">${S.anotacao}</textarea>
-    <div style="font-size:11px;color:#b8957e;text-align:right;margin-top:4px;margin-bottom:12px" id="char-count">${S.anotacao.length} caracteres</div>
-    <button onclick="salvarAnotacao()" style="width:100%;border:none;border-radius:50px;padding:14px;color:white;font-family:'Cormorant Garamond',serif;font-size:16px;cursor:pointer;background:linear-gradient(135deg,#7a3f5a,#c4836a);box-shadow:0 4px 16px rgba(122,63,90,.25);letter-spacing:.5px">Salvar no meu diário</button>`;
+  const slides=getSlides(d);
+  const cur=S.slideIdx||0;
+  const slide=slides[cur];
+  const total=slides.length;
 
-  return`<div class="screen" style="background:linear-gradient(170deg,#fdf6f0,#f5ece8)">
-    ${petalsHTML(0.2)}
+  return`<div class="screen" style="background:${slide.bg}">
+    ${petalsHTML(0.25)}
     <div class="band"></div>
     <div class="devo-topbar">
-      <button class="icon-btn" onclick="go('home')" style="color:#7a3f5a">←</button>
+      <button class="icon-btn" onclick="cur===0?go('home'):prevSlide()" style="color:#7a3f5a" id="devo-back">←</button>
       <div style="font-family:'Cormorant Garamond',serif;font-size:15px;color:#7a3f5a;letter-spacing:2px;text-transform:uppercase">Florescendo</div>
       <button class="icon-btn" onclick="togFav()">${S.isFav?'❤️':'🤍'}</button>
     </div>
-    <div class="devo-scroll"><div class="fade-in">
-      <div style="text-align:center;padding:28px 28px 20px;background:linear-gradient(170deg,#fdf6f0,#faeae0);border-bottom:1px solid rgba(122,63,90,.08)">
-        <div style="font-size:34px;margin-bottom:10px;animation:flt 3s ease-in-out infinite">🌸</div>
-        <div style="font-size:9px;letter-spacing:4px;color:#c4836a;text-transform:uppercase;margin-bottom:8px">${d.referencia}</div>
-        <div style="width:70px;height:1px;background:linear-gradient(90deg,transparent,#d4a0b0,transparent);margin:0 auto"></div>
+    <div class="slides-wrap" onclick="nextSlide()" id="slides-wrap">
+      <div class="slide slide-anim" style="background:${slide.bg}">
+        ${slide.html}
       </div>
-      ${sec(`<div class="card-white"><div style="font-family:'Cormorant Garamond',serif;font-size:19px;line-height:1.75;color:#4a2a3a;text-align:center">"${d.versiculo}"</div></div>`)}
-      ${sec(`<div class="body-text">${d.desconstrucao}</div>`)}
-      ${sec(`${fd()}<div class="body-text" style="font-style:italic">${d.exemplo_jesus}</div>`)}
-      ${sec(`<div class="body-text">${d.conexao_mulher}</div>`)}
-      ${sec(`<div class="card-soft"><div class="impact">${d.frase_impacto}</div></div>`)}
-      ${sec(`${fd()}${ll(d.lista_negacao_titulo)}${mkList(d.lista_negacao)}`)}
-      ${sec(`<div class="body-text">${d.redefinicao}</div>`)}
-      ${sec(`${fd()}${ll(d.lista_cristo_titulo)}${mkList(d.lista_cristo)}`)}
-      ${sec(`<div class="card-soft"><div class="body-text">${d.contraste}</div></div>`)}
-      ${sec(`<div class="body-text">${d.ensinamento_extra}</div>`)}
-      ${sec(`<div class="body-text" style="font-style:italic">${d.aprofundamento}</div>`)}
-      ${sec(`${fd()}${ll(d.lista_madura_titulo)}${mkList(d.lista_madura)}`)}
-      ${sec(`<div style="background:linear-gradient(135deg,#7a3f5a,#9a5a6a);border-radius:14px;padding:22px;text-align:center"><div style="font-family:'Cormorant Garamond',serif;font-size:17px;line-height:1.8;color:white">${d.climax_citacao}</div></div>`)}
-      ${sec(`<div style="text-align:center"><div style="font-family:'Cormorant Garamond',serif;font-size:22px;font-weight:500;color:#7a3f5a;font-style:italic">${d.conclusao_nomeada}</div></div>`)}
-      ${sec(`${fd()}${ll(d.lista_aplicacao_titulo)}${mkList(d.lista_aplicacao)}`)}
-      ${sec(`<div style="text-align:center">
-        <div style="font-family:'Cormorant Garamond',serif;font-size:16px;color:#4a3030;font-style:italic;line-height:1.8;margin-bottom:14px">${d.fechamento_1}</div>
-        <div style="width:36px;height:1px;background:linear-gradient(90deg,transparent,#d4a0b0,transparent);margin:0 auto 14px"></div>
-        <div class="card-soft"><div style="font-family:'Cormorant Garamond',serif;font-size:19px;font-weight:600;color:#4a2a3a;text-align:center;line-height:1.5">${d.fechamento_2}</div></div>
-      </div>`)}
-      <div style="padding:6px 24px"><div style="height:1px;background:linear-gradient(90deg,transparent,rgba(212,160,176,.5),transparent)"></div></div>
-      <div style="background:linear-gradient(135deg,#7a3f5a,#c4836a);padding:28px 24px;text-align:center">
-        <div style="font-size:9px;letter-spacing:4px;text-transform:uppercase;color:rgba(255,255,255,.7);margin-bottom:16px">🙏 Oração</div>
-        <div style="font-family:'Cormorant Garamond',serif;font-size:17px;font-style:italic;line-height:1.85;color:white">${d.oracao}</div>
-      </div>
-      <div style="padding:24px 22px;background:linear-gradient(170deg,#fdf6f0,#faeae0 50%,#f5dce8)">
-        <div style="text-align:center;margin-bottom:18px">
-          <div style="font-size:28px;margin-bottom:8px;line-height:1">📖</div>
-          <div style="font-family:'Cormorant Garamond',serif;font-size:22px;font-weight:600;color:#7a3f5a;margin-bottom:10px;letter-spacing:.5px">Diário Espiritual</div>
-          <div style="font-family:'Cormorant Garamond',serif;font-size:17px;font-weight:500;color:#7a3f5a;line-height:1.7;margin-bottom:2px">Florzinha, o que você aprendeu hoje?</div>
-          <div style="font-family:'Cormorant Garamond',serif;font-size:16px;font-style:italic;color:#c4836a;line-height:1.7">Este cantinho foi reservado para você. 🌸</div>
-          <div style="width:44px;height:1px;background:linear-gradient(90deg,transparent,#d4a0b0,transparent);margin:12px auto 0"></div>
-        </div>
-        ${diarioHtml}
-      </div>
-      <div style="text-align:center;padding:20px 24px 28px">
-        <div style="font-size:22px;margin-bottom:8px">🌸</div>
-        <div style="font-size:9px;letter-spacing:3px;text-transform:uppercase;color:#b8957e;opacity:.7">${d.referencia}</div>
-      </div>
-    </div></div>
+    </div>
+    <div class="slide-dots">
+      ${slides.map((_,i)=>`<div class="slide-dot${i===cur?' active':''}"></div>`).join('')}
+    </div>
     <div class="devo-actions">
-      <button class="btn-sec" onclick="togFav()" style="flex:1">${S.isFav?'❤️ Salvo':'🤍 Salvar'}</button>
-      <button onclick="compartilhar()" style="flex:1;border:none;border-radius:50px;padding:13px 16px;color:white;background:linear-gradient(135deg,#7a3f5a,#c4836a);font-family:'Cormorant Garamond',serif;font-size:15px;cursor:pointer;letter-spacing:.5px">Compartilhar 🌸</button>
+      <button class="btn-sec" onclick="togFav();event.stopPropagation()" style="flex:1">${S.isFav?'❤️ Salvo':'🤍 Salvar'}</button>
+      ${cur<total-1
+        ?`<button onclick="nextSlide();event.stopPropagation()" style="flex:2;border:none;border-radius:50px;padding:13px 16px;color:white;background:linear-gradient(135deg,#7a3f5a,#c4836a);font-family:'Cormorant Garamond',serif;font-size:15px;cursor:pointer;letter-spacing:.5px">Próximo 🌸</button>`
+        :`<button onclick="compartilhar();event.stopPropagation()" style="flex:2;border:none;border-radius:50px;padding:13px 16px;color:white;background:linear-gradient(135deg,#7a3f5a,#c4836a);font-family:'Cormorant Garamond',serif;font-size:15px;cursor:pointer;letter-spacing:.5px">Compartilhar 🌸</button>`
+      }
     </div>
     ${toast_html()}</div>`;
 }
@@ -375,7 +435,17 @@ function render(){
   app.innerHTML=html;
 }
 
-window.go=go;window.togFav=togFav;window.compartilhar=compartilhar;
+window.nextSlide=function(){
+  const d=S.devo;if(!d)return;
+  const total=getSlides(d).length;
+  if((S.slideIdx||0)<total-1){S.slideIdx=(S.slideIdx||0)+1;render();}
+};
+window.prevSlide=function(){
+  if((S.slideIdx||0)>0){S.slideIdx=(S.slideIdx||0)-1;render();}
+  else{go('home');}
+};
+window.go=function(s){S.slideIdx=0;S.screen=s;render();};
+window.togFav=togFav;window.compartilhar=compartilhar;
 window.reqNotif=reqNotif;
 window.updNotif=(t)=>{S.notifTime=t;db.setNotif(t);if(S.notifOn)schedNotif();render();};
 window.retryLoad=()=>{S.error=false;init();};
