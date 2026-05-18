@@ -129,10 +129,53 @@ function togFav(){
 }
 async function compartilhar(){
   const d=S.devo;if(!d)return;
-  const text=`🌸 *${d.palavra}* — ${dateStr}\n\n_"${d.versiculo}"_\n— ${d.referencia}\n\n${d.fechamento_2}\n\n✨ @minhacasinhainterior\nminha-casinha-interior.vercel.app`;
-  const enc=encodeURIComponent(text);
-  if(navigator.share){try{await navigator.share({title:'Florescendo',text,url:'https://minha-casinha-interior.vercel.app'});}catch{window.open(`https://wa.me/?text=${enc}`,'_blank');}}
-  else window.open(`https://wa.me/?text=${enc}`,'_blank');
+  const canvas=document.createElement('canvas');
+  canvas.width=1080;canvas.height=1080;
+  const ctx=canvas.getContext('2d');
+  const bg=ctx.createLinearGradient(0,0,1080,1080);
+  bg.addColorStop(0,'#fdf6f0');bg.addColorStop(0.5,'#faeae0');bg.addColorStop(1,'#f5dce8');
+  ctx.fillStyle=bg;ctx.fillRect(0,0,1080,1080);
+  const band=ctx.createLinearGradient(0,0,1080,0);
+  band.addColorStop(0,'#e8a4c4');band.addColorStop(0.25,'#f4b896');
+  band.addColorStop(0.5,'#e8d5a3');band.addColorStop(0.75,'#a8c8b0');band.addColorStop(1,'#e8a4c4');
+  ctx.fillStyle=band;ctx.fillRect(0,0,1080,12);
+  ctx.font='48px serif';
+  [[80,140],[980,220],[60,920],[1000,860],[540,80]].forEach(([x,y])=>{ctx.globalAlpha=0.35;ctx.fillText('🌸',x,y);});
+  ctx.globalAlpha=1;
+  ctx.textAlign='center';
+  ctx.font='300 48px Georgia,serif';ctx.fillStyle='#7a3f5a';ctx.fillText('F L O R E S C E N D O',540,170);
+  ctx.strokeStyle='#d4a0b0';ctx.lineWidth=1;ctx.globalAlpha=0.6;
+  ctx.beginPath();ctx.moveTo(440,192);ctx.lineTo(640,192);ctx.stroke();ctx.globalAlpha=1;
+  ctx.font='20px Georgia,serif';ctx.fillStyle='#c4836a';ctx.fillText('A PALAVRA DE HOJE',540,248);
+  const gp=ctx.createLinearGradient(200,280,880,380);
+  gp.addColorStop(0,'#7a3f5a');gp.addColorStop(1,'#c4836a');
+  ctx.fillStyle=gp;ctx.font='bold 88px Georgia,serif';ctx.fillText(d.palavra||'',540,365);
+  ctx.strokeStyle='#d4a0b0';ctx.globalAlpha=0.5;
+  ctx.beginPath();ctx.moveTo(340,395);ctx.lineTo(740,395);ctx.stroke();ctx.globalAlpha=1;
+  function wrapText(text,y,font,color,maxW,lh){
+    ctx.font=font;ctx.fillStyle=color;
+    const words=text.split(' ');let line='';
+    for(let w of words){const t=line+w+' ';if(ctx.measureText(t).width>maxW&&line){ctx.fillText(line.trim(),540,y);line=w+' ';y+=lh;}else line=t;}
+    ctx.fillText(line.trim(),540,y);return y+lh;
+  }
+  let y=wrapText('"'+(d.versiculo||'')+'"',470,'italic 32px Georgia,serif','#4a2a3a',860,50);
+  ctx.font='24px Georgia,serif';ctx.fillStyle='#c4836a';ctx.fillText('— '+(d.referencia||''),540,y+10);y+=60;
+  ctx.strokeStyle='rgba(212,160,176,0.4)';ctx.lineWidth=1;
+  ctx.beginPath();ctx.moveTo(200,y+20);ctx.lineTo(880,y+20);ctx.stroke();y+=50;
+  wrapText(d.frase_impacto||'',''+y,'italic 34px Georgia,serif','#7a3f5a',820,52);
+  const cardY=900;
+  ctx.fillStyle='rgba(122,63,90,0.07)';ctx.beginPath();
+  ctx.roundRect(120,cardY,840,140,16);ctx.fill();
+  ctx.font='bold 30px Georgia,serif';ctx.fillStyle='#7a3f5a';ctx.fillText('@minhacasinhainterior',540,cardY+48);
+  ctx.font='22px Georgia,serif';ctx.fillStyle='#c4836a';ctx.fillText('Siga para seu devocional diário 🌸',540,cardY+88);
+  ctx.fillStyle=band;ctx.fillRect(0,1068,1080,12);
+  canvas.toBlob(blob=>{
+    const url=URL.createObjectURL(blob);
+    const a=document.createElement('a');
+    a.href=url;a.download='florescendo-'+( d.palavra||'post')+'.png';
+    a.click();URL.revokeObjectURL(url);
+    toast('Post salvo! Compartilhe no Instagram 🌸');
+  },'image/png');
 }
 async function reqNotif(){
   if(!('Notification'in window)){toast('Não suportado');return;}
