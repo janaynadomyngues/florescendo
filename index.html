@@ -227,14 +227,14 @@ function renderHome(){
       <div style="font-family:'Cormorant Garamond',serif;font-size:15px;font-style:italic;color:#7a3f5a;margin-top:4px;font-weight:500;letter-spacing:.5px">Seu devocional diário para florescer com fé</div>
       <div style="width:44px;height:1px;background:linear-gradient(90deg,#d4a0b0,#e8b896);margin:8px auto 0;opacity:.7"></div>
     </div>
-    <div style="flex:1;display:flex;flex-direction:column;align-items:center;justify-content:space-evenly;padding:16px 32px;text-align:center;position:relative;z-index:1">
+    <div style="flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:0 32px;text-align:center;position:relative;z-index:1;gap:0">
       ${S.loading?`<div style="font-size:52px;margin-bottom:18px;animation:pls 1.5s ease-in-out infinite">🌸</div><div style="font-family:'Cormorant Garamond',serif;font-size:20px;color:#7a3f5a;margin-bottom:8px">Preparando sua palavra...</div><div style="font-size:13px;color:#b8957e;line-height:1.7;max-width:260px">Escrevendo especialmente para você, florzinha 💕</div><div class="loading-dots"><div class="loading-dot"></div><div class="loading-dot"></div><div class="loading-dot"></div></div>`:
       S.error?`<div style="font-size:44px;margin-bottom:12px">🙏</div><p style="font-family:'Cormorant Garamond',serif;color:#7a3f5a;margin-bottom:20px;font-size:16px;line-height:1.6">Não consegui carregar.<br>Verifique sua internet.</p><button class="btn-main" onclick="retryLoad()">Tentar novamente 🌸</button>`:
-      `<div style="font-size:58px;margin-bottom:14px;animation:flt 3s ease-in-out infinite">🌸</div>
+      `<div style="font-size:52px;margin-bottom:8px;animation:flt 3s ease-in-out infinite">🌸</div>
       <div style="font-size:10px;letter-spacing:4px;color:#c4836a;text-transform:uppercase;margin-bottom:8px">A palavra de hoje</div>
       <div style="font-family:'Cormorant Garamond',serif;font-size:54px;font-weight:300;letter-spacing:-1px;background:linear-gradient(135deg,#7a3f5a,#c4836a);-webkit-background-clip:text;-webkit-text-fill-color:transparent;margin-bottom:4px">${S.devo?.palavra||palavraHoje}</div>
-      <div style="font-size:12px;color:#b8957e;letter-spacing:1px;margin-bottom:22px">${dateStr}</div>
-      <div style="width:40px;height:1px;background:linear-gradient(90deg,#d4a0b0,#e8b896);margin:0 auto 22px;opacity:.6"></div>
+      <div style="font-size:12px;color:#b8957e;letter-spacing:1px;margin-bottom:16px">${dateStr}</div>
+      <div style="width:40px;height:1px;background:linear-gradient(90deg,#d4a0b0,#e8b896);margin:0 auto 16px;opacity:.6"></div>
       <button class="btn-main" onclick="go('devo')">Abrir devocional de hoje 🌸</button>`}
     </div>
     ${bnav('home')}${toast_html()}</div>`;
