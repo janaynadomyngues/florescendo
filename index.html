@@ -62,7 +62,7 @@
     .loading-dot:nth-child(2){animation-delay:.2s}
     .loading-dot:nth-child(3){animation-delay:.4s}
     .slides-wrap{flex:1;display:flex;overflow:hidden;position:relative}
-    .slide{min-width:100%;height:100%;display:flex;flex-direction:column;align-items:center;justify-content:flex-start;padding:20px 24px 12px;text-align:center;transition:transform .35s ease;position:relative;z-index:1;overflow-y:auto}
+    .slide{min-width:100%;height:100%;display:flex;flex-direction:column;align-items:center;justify-content:flex-start;padding:16px 20px 8px;text-align:center;transition:transform .35s ease;position:relative;z-index:1;overflow-y:auto}
     .slide-dots{display:flex;gap:6px;justify-content:center;padding:8px 0;flex-shrink:0;background:rgba(253,246,240,.92)}
     .slide-dot{width:6px;height:6px;border-radius:50%;background:rgba(122,63,90,.2);transition:all .3s}
     .slide-dot.active{width:20px;border-radius:4px;background:#7a3f5a}
@@ -289,9 +289,9 @@ function getSlides(d){
     'linear-gradient(135deg,#7a3f5a,#c4836a)',
     'linear-gradient(170deg,#fdf6f0,#faeae0 40%,#f5dce8)',
   ];
-  const fs='font-family:\'Cormorant Garamond\',serif;font-weight:600';
-  const mkItem=i=>`<div style="display:flex;align-items:flex-start;gap:14px;margin-bottom:18px"><span style="color:#d4a0b0;font-size:16px;margin-top:4px;flex-shrink:0">❋</span><span style="${fs};font-size:21px;font-style:italic;color:#5a3a4a;line-height:1.6">${i}</span></div>`;
-  const card=(txt,extra='')=>`<div style="background:rgba(122,63,90,.07);border-radius:20px;padding:24px;border:1px solid rgba(122,63,90,.1);width:100%;${extra}"><div style="${fs};font-size:21px;line-height:1.75;color:#7a3f5a;font-style:italic;text-align:center">${txt}</div></div>`;
+  const fs='font-family:\'Cormorant Garamond\',serif;font-weight:500';
+  const mkItem=i=>`<div style="display:flex;align-items:flex-start;gap:12px;margin-bottom:14px"><span style="color:#d4a0b0;font-size:14px;margin-top:4px;flex-shrink:0">❋</span><span style="${fs};font-size:18px;font-style:italic;color:#5a3a4a;line-height:1.5">${i}</span></div>`;
+  const card=(txt,extra='')=>`<div style="background:rgba(122,63,90,.07);border-radius:18px;padding:18px;border:1px solid rgba(122,63,90,.1);width:100%;${extra}"><div style="${fs};font-size:19px;line-height:1.7;color:#7a3f5a;font-style:italic;text-align:center">${txt}</div></div>`;
 
   const diarioHtml=S.anotacaoSalva?
     `<div style="background:rgba(255,255,255,.7);border-radius:16px;padding:18px 20px;border:1px solid rgba(122,63,90,.15);margin-bottom:12px;width:100%">
@@ -336,7 +336,7 @@ function getSlides(d){
     // Slide 6 - Clímax
     {bg:bgs[5],html:`
       ${card(d.card_climax||d.climax_citacao||'')}
-      <div style="height:20px"></div>
+      <div style="height:12px"></div>
       <div style="font-size:18px;letter-spacing:3px;text-transform:uppercase;color:#7a3f5a;margin-bottom:22px;font-weight:800;font-family:'Cormorant Garamond',serif">${d.lista_madura_titulo}</div>
       <div style="width:100%;text-align:left">${(d.lista_madura||[]).map(mkItem).join('')}</div>`},
     // Slide 7 - Fechamento + identidade
