@@ -14,7 +14,7 @@
     body{font-family:'Lato',sans-serif;background:#f5ece8}
     .screen{height:100svh;display:flex;flex-direction:column;overflow:hidden;position:relative}
     .band{width:100%;height:5px;flex-shrink:0;background:linear-gradient(90deg,#e8a4c4,#f4b896,#e8d5a3,#a8c8b0,#e8a4c4)}
-    .petal{position:fixed;pointer-events:none;z-index:0;filter:drop-shadow(0 2px 4px rgba(200,100,150,0.3))}
+    .petal{position:fixed;pointer-events:none;z-index:9999;filter:drop-shadow(0 2px 4px rgba(200,100,150,0.3))}
     @keyframes pf0{0%,100%{transform:translateY(0) rotate(0deg)}50%{transform:translateY(-22px) rotate(12deg)}}
     @keyframes pf1{0%,100%{transform:translateY(0)}50%{transform:translateY(-30px) rotate(-10deg)}}
     @keyframes pf2{0%,100%{transform:translateY(0)}50%{transform:translateY(-18px)}}
@@ -289,7 +289,7 @@ function getSlides(d){
     'linear-gradient(135deg,#7a3f5a,#c4836a)',
     'linear-gradient(170deg,#fdf6f0,#faeae0 40%,#f5dce8)',
   ];
-  const fs='font-family:\'Cormorant Garamond\',serif;font-weight:500';
+  const fs='font-family:\'Cormorant Garamond\',serif;font-weight:600';
   const mkItem=i=>`<div style="display:flex;align-items:flex-start;gap:14px;margin-bottom:18px"><span style="color:#d4a0b0;font-size:16px;margin-top:4px;flex-shrink:0">❋</span><span style="${fs};font-size:21px;font-style:italic;color:#5a3a4a;line-height:1.6">${i}</span></div>`;
   const card=(txt,extra='')=>`<div style="background:rgba(122,63,90,.07);border-radius:20px;padding:24px;border:1px solid rgba(122,63,90,.1);width:100%;${extra}"><div style="${fs};font-size:21px;line-height:1.75;color:#7a3f5a;font-style:italic;text-align:center">${txt}</div></div>`;
 
@@ -325,19 +325,19 @@ function getSlides(d){
       ${card(d.card_dor||d.frase_impacto)}`},
     // Slide 4 - Lista negação
     {bg:bgs[3],html:`
-      <div style="font-size:12px;letter-spacing:3px;text-transform:uppercase;color:#7a3f5a;margin-bottom:22px;font-weight:700;${fs}">${d.lista_negacao_titulo}</div>
+      <div style="font-size:18px;letter-spacing:3px;text-transform:uppercase;color:#7a3f5a;margin-bottom:22px;font-weight:800;font-family:'Cormorant Garamond',serif">${d.lista_negacao_titulo}</div>
       <div style="width:100%;text-align:left;margin-bottom:18px">${(d.lista_negacao||[]).map(mkItem).join('')}</div>
       ${card(d.card_redefinicao||d.redefinicao||'')}`},
     // Slide 5 - Lista Cristo
     {bg:bgs[4],html:`
-      <div style="font-size:12px;letter-spacing:3px;text-transform:uppercase;color:#7a3f5a;margin-bottom:22px;font-weight:700;${fs}">${d.lista_cristo_titulo}</div>
+      <div style="font-size:18px;letter-spacing:3px;text-transform:uppercase;color:#7a3f5a;margin-bottom:22px;font-weight:800;font-family:'Cormorant Garamond',serif">${d.lista_cristo_titulo}</div>
       <div style="width:100%;text-align:left;margin-bottom:18px">${(d.lista_cristo||[]).map(mkItem).join('')}</div>
       ${card(d.card_contraste||d.contraste||'')}`},
     // Slide 6 - Clímax
     {bg:bgs[5],html:`
       ${card(d.card_climax||d.climax_citacao||'')}
       <div style="height:20px"></div>
-      <div style="font-size:12px;letter-spacing:3px;text-transform:uppercase;color:#7a3f5a;margin-bottom:22px;font-weight:700;${fs}">${d.lista_madura_titulo}</div>
+      <div style="font-size:18px;letter-spacing:3px;text-transform:uppercase;color:#7a3f5a;margin-bottom:22px;font-weight:800;font-family:'Cormorant Garamond',serif">${d.lista_madura_titulo}</div>
       <div style="width:100%;text-align:left">${(d.lista_madura||[]).map(mkItem).join('')}</div>`},
     // Slide 7 - Fechamento + identidade
     {bg:bgs[6],html:`
