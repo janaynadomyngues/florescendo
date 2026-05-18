@@ -34,15 +34,15 @@
     .btn-sec{background:transparent;border:1px solid rgba(122,63,90,.3);border-radius:50px;padding:13px 20px;color:#7a3f5a;font-family:'Cormorant Garamond',serif;font-size:15px;cursor:pointer}
     .icon-btn{background:transparent;border:none;font-size:22px;cursor:pointer;padding:8px;width:42px;height:42px;display:flex;align-items:center;justify-content:center}
     .bottom-nav{display:flex;border-top:1px solid rgba(122,63,90,.1);background:rgba(253,246,240,.97);backdrop-filter:blur(12px);flex-shrink:0;padding-bottom:env(safe-area-inset-bottom,0px);min-height:56px}
-    .nav-btn{flex:1;background:transparent;border:none;padding:8px 4px 4px;cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:2px;font-size:10px;color:#b8957e}
+    .nav-btn{flex:1;background:transparent;border:none;padding:8px 4px 4px;cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:2px;font-size:12px;color:#b8957e;font-weight:600}
     .nav-btn span:first-child{font-size:18px;line-height:1}
     .nav-on{color:#7a3f5a}
     .devo-topbar{display:flex;align-items:center;justify-content:space-between;padding:10px 16px;flex-shrink:0;background:rgba(253,246,240,.92);backdrop-filter:blur(8px);border-bottom:1px solid rgba(122,63,90,.08)}
     .devo-scroll{flex:1;overflow-y:auto}
     .devo-actions{display:flex;gap:10px;padding:14px 16px 20px;flex-shrink:0;background:rgba(253,246,240,.95);border-top:1px solid rgba(122,63,90,.08)}
-    .body-text{font-family:'Cormorant Garamond',serif;font-size:20px;line-height:1.9;color:#4a3030;text-align:center}
+    .body-text{font-family:'Cormorant Garamond',serif;font-size:22px;line-height:1.9;color:#4a3030;text-align:center;font-weight:500}
     .impact{font-family:'Cormorant Garamond',serif;font-size:22px;font-weight:500;line-height:1.6;color:#7a3f5a;font-style:italic;text-align:center}
-    .list-label{font-size:15px;letter-spacing:2px;text-transform:uppercase;color:#7a3f5a;margin-bottom:14px;text-align:center;font-weight:700;font-family:'Cormorant Garamond',serif}
+    .list-label{font-size:17px;letter-spacing:2px;text-transform:uppercase;color:#7a3f5a;margin-bottom:14px;text-align:center;font-weight:700;font-family:'Cormorant Garamond',serif}
     .flor-div{text-align:center;color:#d4a0b0;font-size:14px;opacity:.7;margin:12px 0}
     .devo-list{list-style:none;padding:0}
     .devo-list li{display:flex;align-items:flex-start;gap:10px;margin-bottom:16px;font-family:'Cormorant Garamond',serif;font-size:20px;font-style:italic;color:#5a3a4a;line-height:1.6}
@@ -263,7 +263,7 @@ function renderHome(){
       <div style="font-family:'Cormorant Garamond',serif;font-size:15px;font-style:italic;color:#7a3f5a;margin-top:4px;font-weight:500;letter-spacing:.5px">Seu devocional diário para florescer com fé</div>
       <div style="width:44px;height:1px;background:linear-gradient(90deg,#d4a0b0,#e8b896);margin:8px auto 0;opacity:.7"></div>
     </div>
-    <div style="flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:0 32px;text-align:center;position:relative;z-index:1;gap:0">
+    <div style="flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:0 32px 20px;text-align:center;position:relative;z-index:1;gap:0;max-height:80svh">
       ${S.loading?`<div style="font-size:52px;margin-bottom:18px;animation:pls 1.5s ease-in-out infinite">🌸</div><div style="font-family:'Cormorant Garamond',serif;font-size:20px;color:#7a3f5a;margin-bottom:8px">Preparando sua palavra...</div><div style="font-size:13px;color:#b8957e;line-height:1.7;max-width:260px">Escrevendo especialmente para você, florzinha 💕</div><div class="loading-dots"><div class="loading-dot"></div><div class="loading-dot"></div><div class="loading-dot"></div></div>`:
       S.error?`<div style="font-size:44px;margin-bottom:12px">🙏</div><p style="font-family:'Cormorant Garamond',serif;color:#7a3f5a;margin-bottom:20px;font-size:16px;line-height:1.6">Não consegui carregar.<br>Verifique sua internet.</p><button class="btn-main" onclick="retryLoad()">Tentar novamente 🌸</button>`:
       `<div style="font-size:52px;margin-bottom:8px;animation:flt 3s ease-in-out infinite">🌸</div>
@@ -289,7 +289,7 @@ function getSlides(d){
     'linear-gradient(135deg,#7a3f5a,#c4836a)',
     'linear-gradient(170deg,#fdf6f0,#faeae0 40%,#f5dce8)',
   ];
-  const fs='font-family:\'Cormorant Garamond\',serif';
+  const fs='font-family:\'Cormorant Garamond\',serif;font-weight:500';
   const mkItem=i=>`<div style="display:flex;align-items:flex-start;gap:14px;margin-bottom:18px"><span style="color:#d4a0b0;font-size:16px;margin-top:4px;flex-shrink:0">❋</span><span style="${fs};font-size:21px;font-style:italic;color:#5a3a4a;line-height:1.6">${i}</span></div>`;
   const card=(txt,extra='')=>`<div style="background:rgba(122,63,90,.07);border-radius:20px;padding:24px;border:1px solid rgba(122,63,90,.1);width:100%;${extra}"><div style="${fs};font-size:21px;line-height:1.75;color:#7a3f5a;font-style:italic;text-align:center">${txt}</div></div>`;
 
@@ -374,7 +374,7 @@ function renderDevo(){
     ${petalsHTML(0.25)}
     <div class="band"></div>
     <div class="devo-topbar">
-      <button class="icon-btn" onclick="cur===0?go('home'):prevSlide()" style="color:#7a3f5a" id="devo-back">←</button>
+      <button class="icon-btn" onclick="go('home')" style="color:#7a3f5a;font-size:26px;font-weight:700">←</button>
       <div style="font-family:'Cormorant Garamond',serif;font-size:15px;color:#7a3f5a;letter-spacing:2px;text-transform:uppercase">Florescendo</div>
       <button class="icon-btn" onclick="togFav()">${S.isFav?'❤️':'🤍'}</button>
     </div>
