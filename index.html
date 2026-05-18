@@ -169,12 +169,21 @@ async function compartilhar(){
   ctx.font='bold 30px Georgia,serif';ctx.fillStyle='#7a3f5a';ctx.fillText('@minhacasinhainterior',540,cardY+48);
   ctx.font='22px Georgia,serif';ctx.fillStyle='#c4836a';ctx.fillText('Siga para seu devocional diário 🌸',540,cardY+88);
   ctx.fillStyle=band;ctx.fillRect(0,1068,1080,12);
-  canvas.toBlob(blob=>{
-    const url=URL.createObjectURL(blob);
-    const a=document.createElement('a');
-    a.href=url;a.download='florescendo-'+( d.palavra||'post')+'.png';
-    a.click();URL.revokeObjectURL(url);
-    toast('Post salvo! Compartilhe no Instagram 🌸');
+  canvas.toBlob(async blob=>{
+    const file=new File([blob],'florescendo-'+(d.palavra||'post')+'.png',{type:'image/png'});
+    if(navigator.canShare&&navigator.canShare({files:[file]})){
+      try{
+        await navigator.share({files:[file],title:'Florescendo 🌸',text:'Meu devocional de hoje — @minhacasinhainterior'});
+      }catch(e){
+        const url=URL.createObjectURL(blob);
+        const a=document.createElement('a');a.href=url;a.download=file.name;a.click();URL.revokeObjectURL(url);
+        toast('Post salvo na galeria 🌸');
+      }
+    } else {
+      const url=URL.createObjectURL(blob);
+      const a=document.createElement('a');a.href=url;a.download=file.name;a.click();URL.revokeObjectURL(url);
+      toast('Post salvo na galeria 🌸');
+    }
   },'image/png');
 }
 async function reqNotif(){
