@@ -227,7 +227,7 @@ function renderHome(){
       <div style="font-family:'Cormorant Garamond',serif;font-size:15px;font-style:italic;color:#7a3f5a;margin-top:4px;font-weight:500;letter-spacing:.5px">Seu devocional diário para florescer com fé</div>
       <div style="width:44px;height:1px;background:linear-gradient(90deg,#d4a0b0,#e8b896);margin:8px auto 0;opacity:.7"></div>
     </div>
-    <div style="flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:0 32px;text-align:center;position:relative;z-index:1;max-height:75vh">
+    <div style="flex:1;display:flex;flex-direction:column;align-items:center;justify-content:flex-end;padding:0 32px 40px;text-align:center;position:relative;z-index:1">
       ${S.loading?`<div style="font-size:52px;margin-bottom:18px;animation:pls 1.5s ease-in-out infinite">🌸</div><div style="font-family:'Cormorant Garamond',serif;font-size:20px;color:#7a3f5a;margin-bottom:8px">Preparando sua palavra...</div><div style="font-size:13px;color:#b8957e;line-height:1.7;max-width:260px">Escrevendo especialmente para você, florzinha 💕</div><div class="loading-dots"><div class="loading-dot"></div><div class="loading-dot"></div><div class="loading-dot"></div></div>`:
       S.error?`<div style="font-size:44px;margin-bottom:12px">🙏</div><p style="font-family:'Cormorant Garamond',serif;color:#7a3f5a;margin-bottom:20px;font-size:16px;line-height:1.6">Não consegui carregar.<br>Verifique sua internet.</p><button class="btn-main" onclick="retryLoad()">Tentar novamente 🌸</button>`:
       `<div style="font-size:58px;margin-bottom:14px;animation:flt 3s ease-in-out infinite">🌸</div>
